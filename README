@@ -3,33 +3,35 @@ qt3
 Qt is a multiplatform C++ GUI application framework.
 
 Runtime requirements:
-  cygwin-20060527 snapshot or later
-  libGL1-6.4.2-1
-  libICE6-1.0.0-1
-  libSM6-1.0.0-1
-  libXcursor1-1.1.5.2-1
-  libXft2-2.1.8.2-1
-  libXi6-1.0.0-1
-  libXmu6-1.0.0-1
-  libXrandr2-1.1.0.2-1
+  cygwin-1.5.22-1
+  libGL1-6.5-1
+  libICE6-1.0.1-1
+  libSM6-1.0.1-1
+  libXcursor1-1.1.7-1
+  libXft2-2.1.10-1
+  libXi6-1.0.1-1
+  libXmu6-1.0.2-1
+  libXrandr2-1.1.1-1
+  libaudio2-1.8-1
   minires-1.00-1
 
 Plugin requirements:
   libjpeg62-6b-11
   libmng-1.0.9-1
   libpng12-1.2.8-2
+  libmysqlclient15-5.0.27-1
   postgresql-8.0.7-1
 
 Build requirements:
 (besides corresponding -devel packages)
-  cygwin-20060527 snapshot or later
-  binutils-20050610-1
-  cygport-0.2.0-1
+  cygwin-1.5.22-1
+  binutils-20060817-1
+  cygport-0.2.6-1
   gawk-3.1.5-2
   gcc-core-3.4.4-1
   gcc-g++-3.4.4-1
-  make-3.80-1
-  sed-4.1.4-1
+  make-3.81-1
+  sed-4.1.5-1
 
 Canonical homepage:
   http://www.trolltech.com/
@@ -55,8 +57,9 @@ This will create:
 
 -------------------------------------------
 
-Files included in the qt3 (runtime libs) package:
+Files included in the binary packages:
 
+(qt3)
   /usr/bin/cygqt-mt-3.dll
   /usr/bin/cygqui-1.dll
   /usr/bin/qtconfig-qt3
@@ -65,6 +68,7 @@ Files included in the qt3 (runtime libs) package:
   /usr/lib/qt3/plugins/imageformats/libqmng.dll
   /usr/lib/qt3/plugins/imageformats/libqpng.dll
   /usr/lib/qt3/plugins/sqldrivers/libqsqlite.dll
+  /usr/lib/qt3/plugins/sqldrivers/libqsqlmysql.dll
   /usr/lib/qt3/plugins/sqldrivers/libqsqlpsql.dll
   /usr/share/applications/qtconfig-qt3.desktop
   /usr/share/doc/Cygwin/qt3-3.3.6.README
@@ -96,8 +100,7 @@ Files included in the qt3 (runtime libs) package:
   /usr/share/qt3/translations/qt_untranslated.ts
   /usr/share/qt3/translations/README
 
-Files included in the qt3-bin package:
-
+(qt3-bin)
   /usr/bin/designer-qt3
   /usr/bin/linguist-qt3
   /usr/bin/lrelease-qt3
@@ -125,8 +128,7 @@ Files included in the qt3-bin package:
   /usr/share/qt3/tools/designer/templates/Dialog_with_Buttons_(Right).ui
   /usr/share/qt3/tools/designer/templates/Tab_Dialog.ui
 
-Files included in the qt3-devel package:
-
+(qt3-devel)
   /etc/profile.d/qt3-devel.csh
   /etc/profile.d/qt3-devel.sh
   /usr/bin/qmake-qt3
@@ -549,8 +551,7 @@ Files included in the qt3-devel package:
   /usr/lib/qt3/mkspecs/cygwin-g++/qmake.conf
   /usr/lib/qt3/mkspecs/cygwin-g++/qplatformdefs.h
 
-Files included in the qt3-doc package:
-
+(qt3-doc)
   /usr/bin/assistant-qt3
   /usr/lib/qt3/bin/assistant.exe
   /usr/share/applications/assistant-qt3.desktop
@@ -2494,6 +2495,10 @@ Files included in the qt3-doc package:
 ------------------
 
 Port Notes:
+
+----- version 3.3.7-1 -----
+Version bump.
+Added NAS sound support and MySQL plugin.
 
 ----- version 3.3.6-1 -----
 Version bump, built for modular X11.
