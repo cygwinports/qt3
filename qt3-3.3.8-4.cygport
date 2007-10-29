@@ -1,0 +1,238 @@
+HOMEPAGE="http://www.trolltech.com/products/qt/"
+ORIG_PN="qt-x11-free"
+#SRC_URI="ftp://ftp.trolltech.com/qt/source/${ORIG_PN}-${PV}.tar.gz"
+SRC_URI="http://ftp.silug.org/mirrors/ftp.trolltech.com/qt/source/${ORIG_PN}-${PV}.tar.gz"
+PATCH_URI="
+	mirror://portage/x11-libs/qt/files/qt-${PV}-uic-fix.patch
+	mirror://portage/x11-libs/qt/files/0001-dnd_optimization.patch
+	mirror://portage/x11-libs/qt/files/0002-dnd_active_window_fix.patch
+	mirror://portage/x11-libs/qt/files/0038-dragobject-dont-prefer-unknown.patch
+	mirror://portage/x11-libs/qt/files/0044-qscrollview-windowactivate-fix.diff
+	mirror://portage/x11-libs/qt/files/0047-fix-kmenu-widget.diff
+	mirror://portage/x11-libs/qt/files/0048-qclipboard_hack_80072.patch
+	mirror://portage/x11-libs/qt/files/0081-format-string-fixes.diff
+	mirror://portage/x11-libs/qt/files/qt-${PV}-unicode-off-by-one.patch
+"
+SRC_DIR=${ORIG_PN}-${PV}
+
+QPREFIX="/usr/lib/qt${PV_MAJ}"
+QBINDIR="${QPREFIX}/bin"
+QINCLUDEDIR="/usr/include/qt${PV_MAJ}"
+QLIBDIR="${QPREFIX}/lib"
+QPLUGINDIR="/usr/lib/qt${PV_MAJ}/plugins"
+QDATADIR="/usr/share/qt${PV_MAJ}"
+QDOCDIR="${QDATADIR}/doc"
+QMKSPECSDIR="${QPREFIX}/mkspecs/cygwin-g++"
+QTEMPLATESDIR="${QDATADIR}/tools/designer/templates"
+QTRANSLATIONSDIR="${QDATADIR}/translations"
+QSYSCONFDIR="/etc/qt${PV_MAJ}"
+
+src_compile() {
+	cd ${S}/src/moc
+
+	flex moc.l
+	rm -f moc_lex.cpp
+	mv lex.yy.c moc_lex.cpp
+
+	byacc -d moc.y
+	rm -f moc_yacc.{cpp,h}
+	mv y.tab.c moc_yacc.cpp
+	mv y.tab.h moc_yacc.h
+
+	cd ${B}
+
+	export CFLAGS CXXFLAGS LDFLAGS
+	export PATH="${B}/bin:${B}/lib:${PATH}"
+
+	${S}/configure \
+		-prefix ${QPREFIX} \
+		-bindir ${QBINDIR} \
+		-headerdir ${QINCLUDEDIR} \
+		-libdir ${QLIBDIR} \
+		-plugindir ${QPLUGINDIR} \
+		-datadir ${QDATADIR} \
+		-docdir ${QDOCDIR} \
+		-sysconfdir ${QSYSCONFDIR} \
+		-translationdir ${QTRANSLATIONSDIR} \
+		-platform cygwin-g++ -xplatform cygwin-g++ \
+		-fast -verbose -continue \
+		-release -shared -thread \
+		-no-pch -stl \
+		-largefile -tablet \
+		-sm -xft -xkb -xrandr -xrender -xshape -no-xinerama \
+		-qt-gif -plugin-imgfmt-jpeg -plugin-imgfmt-mng -plugin-imgfmt-png \
+		-system-libjpeg -system-libmng -system-libpng -system-zlib \
+		-no-exceptions -no-g++-exceptions \
+		-lresolv \
+		-no-dlopen-opengl \
+		-enable-module=opengl \
+		-qt-style-cde -qt-style-compact -qt-style-motif -qt-style-motifplus \
+		-qt-style-platinum -qt-style-sgi -qt-style-windows \
+		-no-ipv6 \
+		-no-cups \
+		-system-nas-sound \
+		-no-sql-ibase \
+		-plugin-sql-mysql -I/usr/include/mysql -L/usr/lib/mysql \
+		-no-sql-odbc \
+		-plugin-sql-psql -I/usr/include/postgresql/server \
+		-plugin-sql-sqlite \
+		|| error "configure failed"
+
+	cygmake src-qmake src-moc sub-src sub-tools \
+		UIC="${B}/bin/uic -nounload -L ${B}/plugins"
+}
+
+src_install() {
+	cd ${B}
+	dodir ${QBINDIR} ${QINCLUDEDIR} ${QLIBDIR} ${QPLUGINDIR} ${QDOCDIR} \
+		${QTEMPLATESDIR} ${QTRANSLATIONSDIR} ${QSYSCONFDIR} ${QMKSPECSDIR}
+
+	echo ">>> Installing executables..."
+
+	exeinto ${QBINDIR}
+	doexe ${S}/bin/* ${B}/bin/*.exe ${B}/qmake/qmake.exe
+
+	# QBINDIR != /usr/bin
+	dobin ${B}/lib/*.dll
+
+	for x in assistant designer linguist lrelease lupdate qtconfig qmake
+	do
+		dosym ../lib/qt${PV_MAJ}/bin/$x.exe /usr/bin/$x-${PV_MAJ}
+	done
+
+	newicon ${S}/tools/assistant/images/appicon.png assistant-${PV_MAJ}.png
+	newicon ${S}/tools/designer/designer/images/designer_appicon.png designer-${PV_MAJ}.png
+	newicon ${S}/tools/linguist/linguist/images/appicon.png linguist-${PV_MAJ}.png
+	newicon ${S}/tools/qtconfig/images/appicon.png qtconfig-${PV_MAJ}.png
+
+	make_desktop_entry assistant-${PV_MAJ} "Qt${PV_MAJ} Assistant" \
+		assistant-${PV_MAJ}.png "Development;Qt"
+	make_desktop_entry designer-${PV_MAJ} "Qt${PV_MAJ} Designer" \
+		designer-${PV_MAJ}.png "Development;GUIDesigner;Qt"
+	make_desktop_entry linguist-${PV_MAJ} "Qt${PV_MAJ} Linguist" \
+		linguist-${PV_MAJ}.png "Development;Translation;Qt"
+	make_desktop_entry qtconfig-${PV_MAJ} "Qt${PV_MAJ} Configuration" \
+		qtconfig-${PV_MAJ}.png "Settings;DesktopSettings;Qt"
+
+	echo ">>> Installing libraries..."
+
+	insinto ${QLIBDIR}
+	doins ${B}/lib/*.a ${B}/lib/*.prl ${S}/lib/libqt-mt.la
+	dosym libqt-mt.dll.a ${QLIBDIR}/libqt.dll.a
+	sed -e 's#cygqt#../../../bin/cygqt#' \
+		-e "s#^old.*#old_library=''#" \
+		-i ${D}${QLIBDIR}/libqt-mt.la
+
+	insinto /usr/lib/pkgconfig
+	doins ${B}/lib/qt-mt.pc
+	dosym qt-mt.pc /usr/lib/pkgconfig/qt.pc
+
+	echo ">>> Installing plugins..."
+
+	for x in `find plugins -name '*.dll'`
+	do
+		exeinto ${QPREFIX}/`dirname $x`
+		doexe ${B}/$x
+	done
+
+	echo ">>> Installing header files..."
+
+	insinto ${QINCLUDEDIR}
+	doins ${S}/include/*.h ${B}/include/*.h
+
+	insinto ${QINCLUDEDIR}/private
+	doins ${S}/include/private/*.h
+
+	ln -sf ../../include/qt${PV_MAJ} ${D}${QPREFIX}/include
+
+	echo ">>> Installing qmake specs..."
+
+	insinto ${QMKSPECSDIR}
+	doins ${S}/mkspecs/cygwin-g++/*
+
+	insinto ${QPREFIX}
+	doins ${B}/.qmake.cache
+	sed -i -e "s:${B}:/usr/lib/qt3:g" ${D}${QPREFIX}/.qmake.cache
+
+	echo ">>> Installing designer templates..."
+
+	insinto ${QTEMPLATESDIR}
+	doins ${S}/tools/designer/templates/*
+
+	echo ">>> Installing translation files..."
+
+	insinto ${QTRANSLATIONSDIR}
+	doins ${S}/translations/*
+
+	echo ">>> Installing HTML documentation..."
+
+	dodir ${QDOCDIR}
+	cp -r ${S}/doc/html/ ${D}${QDOCDIR}/
+
+	keepdir ${QSYSCONFDIR}
+
+	dodir /etc/profile.d
+	echo "export QMAKESPEC=cygwin-g++" > ${D}/etc/profile.d/${PN}-devel.sh
+	echo "setenv QMAKESPEC cygwin-g++" > ${D}/etc/profile.d/${PN}-devel.csh
+
+	dodoc ${S}/LICENSE.{G,Q}PL ${S}/PLATFORMS ${S}/README-QT.TXT ${S}/changes-${PV}
+}
+
+PKG_NAMES="${PN} ${PN}-assistant ${PN}-designer ${PN}-linguist ${PN}-devel"
+PKG_HINTS="setup assistant designer linguist devel"
+n=0
+PKG_CONTENTS[$((n++))]="
+	--exclude=designer
+	${QSYSCONFDIR#/}
+	usr/bin/*.dll
+	usr/bin/qtconfig-${PV_MAJ}
+	${QBINDIR#/}/qtconfig.exe
+	${QPLUGINDIR#/}
+	usr/share/applications/qtconfig-${PV_MAJ}.desktop
+	usr/share/doc
+	usr/share/pixmaps/qtconfig-${PV_MAJ}.png
+	${QTRANSLATIONSDIR#/}
+"
+PKG_CONTENTS[$((n++))]="
+	usr/bin/assistant-${PV_MAJ}
+	${QBINDIR#/}/assistant.exe
+	usr/share/applications/assistant-${PV_MAJ}.desktop
+	usr/share/pixmaps/assistant-${PV_MAJ}.png
+	${QDOCDIR#/}
+"
+PKG_CONTENTS[$((n++))]="
+	usr/bin/designer-${PV_MAJ}
+	${QBINDIR#/}/designer.exe
+	${QPLUGINDIR#/}/designer
+	usr/share/applications/designer-${PV_MAJ}.desktop
+	usr/share/pixmaps/designer-${PV_MAJ}.png
+	${QTEMPLATESDIR#/}
+"
+PKG_CONTENTS[$((n++))]="
+	usr/bin/linguist-${PV_MAJ}
+	usr/bin/lrelease-${PV_MAJ}
+	usr/bin/lupdate-${PV_MAJ}
+	${QBINDIR#/}/l*
+	usr/share/applications/linguist-${PV_MAJ}.desktop
+	usr/share/pixmaps/linguist-${PV_MAJ}.png
+"
+PKG_CONTENTS[$((n++))]="
+	etc/profile.d/
+	usr/bin/qmake-${PV_MAJ}
+	${QINCLUDEDIR#/}
+	usr/lib/pkgconfig/
+	${QPREFIX#/}/.qmake.cache
+	${QBINDIR#/}/findtr
+	${QBINDIR#/}/moc.exe
+	${QBINDIR#/}/qm2ts.exe
+	${QBINDIR#/}/qt20fix
+	${QBINDIR#/}/qtrename140
+	${QBINDIR#/}/qmake.exe
+	${QBINDIR#/}/uic.exe
+	${QPREFIX#/}/include
+	${QLIBDIR#/}
+	${QMKSPECSDIR#/}
+"
+unset n
+
+DIFF_EXCLUDES="3rdparty libqt-mt.la moc_lex.* moc_yacc.*"
