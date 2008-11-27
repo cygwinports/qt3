@@ -1,0 +1,97 @@
+--- origsrc/qt-x11-free-3.3.8/mkspecs/cygwin-g++/qmake.conf	2007-02-02 08:01:44.000000000 -0600
++++ src/qt-x11-free-3.3.8/mkspecs/cygwin-g++/qmake.conf	2007-10-29 06:38:36.734375000 -0500
+@@ -22,7 +22,7 @@
+ QMAKE_CFLAGS_WARN_OFF	= -w
+ QMAKE_CFLAGS_RELEASE	= -O2
+ QMAKE_CFLAGS_DEBUG	= -g
+-QMAKE_CFLAGS_SHLIB	=
++QMAKE_CFLAGS_SHLIB	= -DPIC -DDLL_EXPORT
+ QMAKE_CFLAGS_YACC	= -Wno-unused -Wno-parentheses
+ QMAKE_CFLAGS_THREAD	= -D_REENTRANT
+ 
+@@ -39,28 +39,28 @@
+ 
+ QMAKE_INCDIR		=
+ QMAKE_LIBDIR		=
+-QMAKE_INCDIR_X11	= /usr/X11R6/include
+-QMAKE_LIBDIR_X11	= /usr/X11R6/lib
+-QMAKE_INCDIR_QT		= $(QTDIR)/include
+-QMAKE_LIBDIR_QT		= $(QTDIR)/lib
+-QMAKE_INCDIR_OPENGL	= /usr/X11R6/include
+-QMAKE_LIBDIR_OPENGL	= /usr/X11R6/lib
++QMAKE_INCDIR_X11	=
++QMAKE_LIBDIR_X11	=
++QMAKE_INCDIR_QT		= /usr/include/qt3
++QMAKE_LIBDIR_QT		= /usr/lib/qt3/lib
++QMAKE_INCDIR_OPENGL	=
++QMAKE_LIBDIR_OPENGL	=
+ 
+ QMAKE_LINK		= g++
+ QMAKE_LINK_SHLIB	= g++
+-QMAKE_LFLAGS		=
++QMAKE_LFLAGS		= -Wl,--enable-auto-import
+ QMAKE_LFLAGS_RELEASE	=
+ QMAKE_LFLAGS_DEBUG	=
+-QMAKE_LFLAGS_SHLIB	= -shared
++QMAKE_LFLAGS_SHLIB	= -shared -Wl,--enable-auto-image-base
+ QMAKE_LFLAGS_PLUGIN	= $$QMAKE_LFLAGS_SHLIB
+-QMAKE_LFLAGS_SONAME	= -Wl,-soname,
++QMAKE_LFLAGS_SONAME	= 
+ QMAKE_LFLAGS_THREAD	=
+-QMAKE_RPATH		= -Wl,-rpath,
++QMAKE_RPATH		= 
+ QMAKE_CYGWIN_SHLIB	= 1
+ QMAKE_CYGWIN_EXE	= 1
+  
+ QMAKE_LIBS		=
+-QMAKE_LIBS_DYNLOAD	= -ldl
++QMAKE_LIBS_DYNLOAD	= 
+ QMAKE_LIBS_X11		= -lXext -lX11
+ QMAKE_LIBS_X11SM	= -lSM -lICE
+ QMAKE_LIBS_QT		= -lqt
+@@ -69,11 +69,11 @@
+ QMAKE_LIBS_OPENGL_QT	= -lGL -lXmu
+ QMAKE_LIBS_THREAD	= -lpthread
+ 
+-QMAKE_MOC		= $(QTDIR)/bin/moc
+-QMAKE_UIC		= $(QTDIR)/bin/uic
++QMAKE_MOC		= /usr/lib/qt3/bin/moc
++QMAKE_UIC		= /usr/lib/qt3/bin/uic -nounload
+ 
+ QMAKE_AR		= ar cqs
+-QMAKE_RANLIB		=
++QMAKE_RANLIB		= ranlib
+ 
+ QMAKE_TAR		= tar -cf
+ QMAKE_GZIP		= gzip -9f
+--- origsrc/qt-x11-free-3.3.8/mkspecs/cygwin-g++/qplatformdefs.h	2003-05-27 10:19:20.000000000 -0500
++++ src/qt-x11-free-3.3.8/mkspecs/cygwin-g++/qplatformdefs.h	2007-10-28 22:15:48.281250000 -0500
+@@ -42,24 +42,16 @@
+ 
+ #include <sys/types.h>
+ #include <sys/ioctl.h>
+-// Cygwin does not provide <sys/ipc.h> and <sys/shm.h> because it
+-// doesn't support SysV IPC or shared memory. See for example:
+-// 	http://afni.nimh.nih.gov/afni/afniboard/messages/1725.html
++#include <sys/ipc.h>
+ #include <sys/time.h>
++#include <sys/shm.h>
+ #include <sys/socket.h>
+ #include <sys/stat.h>
+ #include <sys/wait.h>
+-#include <windows.h>
+ 
+-// Resolver functions are not implemented in Cygwin, headers
+-// <arpa/nameser.h> and <resolv.h> are missing:
+-// 	http://cygwin.com//cgi-bin/cygwin-todo.cgi?20000426.105252
+-// Maybe bindlib_w32
+-// 	http://www.php.net/extra/bindlib_w32.zip
+-// or Don Berstein's djbdns:
+-// 	http://cr.yp.to/djbdns.html
+-// provide this functionality, but not necessarily under the Cygwin license...
+ #include <netinet/in.h>
++#include <arpa/nameser.h>
++#include <resolv.h>
+ 
+ 
+ #if !defined(QT_NO_COMPAT)

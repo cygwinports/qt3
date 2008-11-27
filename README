@@ -4,35 +4,36 @@ Qt is a multiplatform C++ GUI application framework.
 
 Runtime requirements:
   cygwin-1.5.24-2
-  libGL1-7.0.1-1
-  libICE6-1.0.4-1
-  libSM6-1.0.3-1
-  libX11_6-1.1.3-1
-  libXcursor1-1.1.9-1
-  libXext6-1.0.3-1
-  libXft2-2.1.12-1
-  libXi6-1.1.3-1
-  libXmu6-1.0.3-1
-  libXrandr2-1.2.2-1
-  libXrender1-0.9.4-1
-  libaudio2-1.9-1
-  libfontconfig1-2.3.2-2
-  libfreetype26-2.3.5-1
+  libaudio2-1.9.1-2
+  libfontconfig1-2.6.0-1
+  libfreetype26-2.3.7-1
+  libGL1-7.2-1
+  libICE6-1.0.4-2
+  libSM6-1.1.0-1
+  libX11_6-1.1.5-1
+  libXcursor1-1.1.9-2
+  libXext6-1.0.4-1
+  libXft2-2.1.13-1
+  libXi6-1.1.3-2
+  libXmu6-1.0.4-1
+  libXrandr2-1.2.3-1
+  libXrender1-0.9.4-2
   minires-1.01-1
 
 Plugin requirements:
   libjpeg62-6b-12
   libmng1-1.0.10-1
-  libpng12-1.2.22-1
-  libmysqlclient15-5.0.45-1
-  libpq4-8.0.7-1
+  libpng12-1.2.33-1
+  libmysqlclient15-5.0.67-1
+  libpq5-8.2.9-1
 
 Build requirements:
 (besides corresponding -devel packages)
-  cygwin-1.5.24-2
-  binutils-20060817-1
-  cygport-0.3.6-1
-  gawk-3.1.5-4
+  binutils-20080624-2
+  bison-2.3-1
+  cygport-0.4.2-1
+  flex-2.5.35-1
+  gawk-3.1.6-1
   gcc-core-3.4.4-3
   gcc-g++-3.4.4-3
   make-3.81-1
@@ -47,46 +48,41 @@ Canonical download:
 -------------------------------------------
 
 Build instructions:
-  unpack qt3-3.3.8-X-src.tar.bz2
+  unpack qt3-3.3.8b-X-src.tar.bz2
     if you use setup to install this src package, it will be
 	 unpacked under /usr/src automatically
   cd /usr/src
-  cygport ./qt3-3.3.8-X.cygport all
+  cygport ./qt3-3.3.8b-X.cygport all
 
 This will create:
-  /usr/src/qt3-3.3.8-X-src.tar.bz2
-  /usr/src/qt3-3.3.8-X.tar.bz2
-  /usr/src/qt3-assistant-3.3.8-X.tar.bz2
-  /usr/src/qt3-designer-3.3.8-X.tar.bz2
-  /usr/src/qt3-devel-3.3.8-X.tar.bz2
-  /usr/src/qt3-linguist-3.3.8-X.tar.bz2
+  /usr/src/libqt3-3.3.8b-X.tar.bz2
+  /usr/src/libqt3-devel-3.3.8b-X.tar.bz2
+  /usr/src/qt3-3.3.8b-X-src.tar.bz2
+  /usr/src/qt3-devel-tools-3.3.8b-X.tar.bz2
+  /usr/src/qt3-doc-3.3.8b-X.tar.bz2
+  /usr/src/qt3-qtconfig-3.3.8b-X.tar.bz2
 
 -------------------------------------------
 
 Files included in the binary packages:
 
-(qt3)
+(libqt3)
   /usr/bin/cygqt-mt-3.dll
   /usr/bin/cygqui-1.dll
-  /usr/bin/qtconfig-3
-  /usr/lib/qt3/bin/qtconfig.exe
   /usr/lib/qt3/plugins/imageformats/libqjpeg.dll
   /usr/lib/qt3/plugins/imageformats/libqmng.dll
   /usr/lib/qt3/plugins/imageformats/libqpng.dll
   /usr/lib/qt3/plugins/sqldrivers/libqsqlite.dll
   /usr/lib/qt3/plugins/sqldrivers/libqsqlmysql.dll
   /usr/lib/qt3/plugins/sqldrivers/libqsqlpsql.dll
-  /usr/share/applications/qtconfig-3.desktop
-  /usr/share/doc/Cygwin/qt3-3.3.8.README
-  /usr/share/doc/qt3-3.3.8/changes-3.3.8
-  /usr/share/doc/qt3-3.3.8/FAQ
-  /usr/share/doc/qt3-3.3.8/INSTALL
-  /usr/share/doc/qt3-3.3.8/LICENSE.GPL
-  /usr/share/doc/qt3-3.3.8/LICENSE.QPL
-  /usr/share/doc/qt3-3.3.8/PLATFORMS
-  /usr/share/doc/qt3-3.3.8/README
-  /usr/share/doc/qt3-3.3.8/README-QT.TXT
-  /usr/share/pixmaps/qtconfig-3.png
+  /usr/share/doc/qt3-3.3.8b/changes-3.3.8b
+  /usr/share/doc/qt3-3.3.8b/FAQ
+  /usr/share/doc/qt3-3.3.8b/INSTALL
+  /usr/share/doc/qt3-3.3.8b/LICENSE.GPL
+  /usr/share/doc/qt3-3.3.8b/LICENSE.QPL
+  /usr/share/doc/qt3-3.3.8b/PLATFORMS
+  /usr/share/doc/qt3-3.3.8b/README
+  /usr/share/doc/qt3-3.3.8b/README-QT.TXT
   /usr/share/qt3/translations/qt_ar.qm
   /usr/share/qt3/translations/qt_ar.ts
   /usr/share/qt3/translations/qt_cs.qm
@@ -106,43 +102,45 @@ Files included in the binary packages:
   /usr/share/qt3/translations/qt_untranslated.ts
   /usr/share/qt3/translations/README
 
-(qt3-assistant)
-  /usr/bin/assistant-3
-  /usr/lib/qt3/bin/assistant.exe
-  /usr/share/applications/assistant-3.desktop
-  /usr/share/pixmaps/assistant-3.png
-  /usr/share/qt3/doc/html/*
+(qt3-qtconfig)
+  /usr/bin/qtconfig-qt3
+  /usr/lib/qt3/bin/qtconfig.exe
+  /usr/share/applications/qtconfig-qt3.desktop
+  /usr/share/pixmaps/qtconfig-qt3.png
 
-(qt3-designer)
-  /usr/bin/designer-3
+(qt3-devel-tools)
+  /usr/bin/assistant-qt3
+  /usr/bin/designer-qt3
+  /usr/bin/linguist-qt3
+  /usr/lib/qt3/bin/assistant.exe
   /usr/lib/qt3/bin/designer.exe
+  /usr/lib/qt3/bin/linguist.exe
   /usr/lib/qt3/plugins/designer/libcppeditor.dll
   /usr/lib/qt3/plugins/designer/libdlgplugin.dll
   /usr/lib/qt3/plugins/designer/libgladeplugin.dll
   /usr/lib/qt3/plugins/designer/libkdevdlgplugin.dll
   /usr/lib/qt3/plugins/designer/librcplugin.dll
   /usr/lib/qt3/plugins/designer/libwizards.dll
-  /usr/share/applications/designer-3.desktop
-  /usr/share/pixmaps/designer-3.png
+  /usr/share/applications/assistant-qt3.desktop
+  /usr/share/applications/designer-qt3.desktop
+  /usr/share/applications/linguist-qt3.desktop
+  /usr/share/pixmaps/assistant-qt3.png
+  /usr/share/pixmaps/designer-qt3.png
+  /usr/share/pixmaps/linguist-qt3.png
   /usr/share/qt3/tools/designer/templates/Configuration_Dialog.ui
   /usr/share/qt3/tools/designer/templates/Dialog_with_Buttons_(Bottom).ui
   /usr/share/qt3/tools/designer/templates/Dialog_with_Buttons_(Right).ui
   /usr/share/qt3/tools/designer/templates/Tab_Dialog.ui
 
-(qt3-linguist)
-  /usr/bin/linguist-3
-  /usr/bin/lrelease-3
-  /usr/bin/lupdate-3
-  /usr/lib/qt3/bin/linguist.exe
-  /usr/lib/qt3/bin/lrelease.exe
-  /usr/lib/qt3/bin/lupdate.exe
-  /usr/share/applications/linguist-3.desktop
-  /usr/share/pixmaps/linguist-3.png
+(qt3-doc)
+  /usr/share/qt3/doc/html/*
 
-(qt3-devel)
+(libqt3-devel)
   /etc/profile.d/qt3-devel.csh
   /etc/profile.d/qt3-devel.sh
-  /usr/bin/qmake-3
+  /usr/bin/lrelease-qt3
+  /usr/bin/lupdate-qt3
+  /usr/bin/qmake-qt3
   /usr/include/qt3/jri.h
   /usr/include/qt3/jritypes.h
   /usr/include/qt3/jri_md.h
@@ -543,6 +541,8 @@ Files included in the binary packages:
   /usr/lib/pkgconfig/qt-mt.pc
   /usr/lib/qt3/.qmake.cache
   /usr/lib/qt3/bin/findtr
+  /usr/lib/qt3/bin/lrelease.exe
+  /usr/lib/qt3/bin/lupdate.exe
   /usr/lib/qt3/bin/moc.exe
   /usr/lib/qt3/bin/qm2ts.exe
   /usr/lib/qt3/bin/qmake.exe
@@ -569,6 +569,9 @@ Files included in the binary packages:
 ------------------
 
 Port Notes:
+
+----- version 3.3.8b-1 -----
+Version bump.  Rearranged package layout.
 
 ----- version 3.3.8-4 -----
 Patch from Gentoo for CVE-2007-4137.

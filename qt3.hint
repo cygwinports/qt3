@@ -1,0 +1,4 @@
+category: KDE X11
+requires: libqt3
+sdesc: "C++ GUI application framework (sources)"
+ldesc: "Qt is a multiplatform C++ GUI application framework."

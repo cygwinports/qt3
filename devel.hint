@@ -1,5 +1,0 @@
-category: KDE X11
-requires: cygwin qt3 mesa-devel libSM-devel libX11-devel libXcursor-devel libXext-devel libXft-devel libXi-devel libXmu-devel libXrandr-devel libXrender-devel libaudio-devel libfontconfig-devel libfreetype2-devel minires-devel
-external-source: qt3
-sdesc: "C++ GUI application framework (qmake/moc/uic, headers, import libraries)"
-ldesc: "Qt is a multiplatform C++ GUI application framework."

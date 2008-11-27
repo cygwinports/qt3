@@ -1,0 +1,11 @@
+--- origsrc/qt-x11-free-3.3.8b/src/moc/moc.y	2008-11-21 03:10:30.244254300 -0600
++++ src/qt-x11-free-3.3.8b/src/moc/moc.y	2008-11-21 03:52:58.100054300 -0600
+@@ -2833,7 +2833,7 @@
+ {
+     const char *hdr1 = "/****************************************************************************\n"
+ 		 "** %s meta object code from reading C++ file '%s'\n**\n";
+-    const char *hdr2 = "** Created: %s\n"
++    const char *hdr2 = "** Created: %s\n";
+     const char *hdr3 = "** WARNING! All changes made in this file will be lost!\n";
+     const char *hdr4 = "*****************************************************************************/\n\n";
+     int   i;

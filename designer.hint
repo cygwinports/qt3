@@ -1,5 +1,0 @@
-category: KDE X11 Devel
-requires: cygwin qt3
-external-source: qt3
-sdesc: "C++ GUI application framework (GUI designer)"
-ldesc: "Qt is a multiplatform C++ GUI application framework."

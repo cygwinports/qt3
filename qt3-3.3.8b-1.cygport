@@ -3,15 +3,23 @@ ORIG_PN="qt-x11-free"
 #SRC_URI="ftp://ftp.trolltech.com/qt/source/${ORIG_PN}-${PV}.tar.gz"
 SRC_URI="http://ftp.silug.org/mirrors/ftp.trolltech.com/qt/source/${ORIG_PN}-${PV}.tar.gz"
 PATCH_URI="
-	mirror://portage/x11-libs/qt/files/qt-${PV}-uic-fix.patch
+	mirror://portage/x11-libs/qt/files/qt-3.3.8-uic-fix.patch
 	mirror://portage/x11-libs/qt/files/0001-dnd_optimization.patch
 	mirror://portage/x11-libs/qt/files/0002-dnd_active_window_fix.patch
 	mirror://portage/x11-libs/qt/files/0038-dragobject-dont-prefer-unknown.patch
 	mirror://portage/x11-libs/qt/files/0044-qscrollview-windowactivate-fix.diff
 	mirror://portage/x11-libs/qt/files/0047-fix-kmenu-widget.diff
 	mirror://portage/x11-libs/qt/files/0048-qclipboard_hack_80072.patch
-	mirror://portage/x11-libs/qt/files/0081-format-string-fixes.diff
-	mirror://portage/x11-libs/qt/files/qt-${PV}-unicode-off-by-one.patch
+	mirror://portage/x11-libs/qt/files/qt-3.3.8-fix-compiler-detection.patch
+	mirror://portage/x11-libs/qt/files/qt-3.3.8b-cjk-fix.patch
+	3.3.8-configure-misc.patch
+	3.3.8-dlopen.patch
+	3.3.8-mkspecs.patch
+	3.3.8-not-windows.patch
+	3.3.8-odbc32.patch
+	3.3.8-qmake.patch
+	3.3.8-static-const.patch
+	3.3.8b-moc-syntax-error.patch
 "
 SRC_DIR=${ORIG_PN}-${PV}
 
@@ -97,22 +105,22 @@ src_install() {
 
 	for x in assistant designer linguist lrelease lupdate qtconfig qmake
 	do
-		dosym ../lib/qt${PV_MAJ}/bin/$x.exe /usr/bin/$x-${PV_MAJ}
+		dosym ../lib/qt${PV_MAJ}/bin/$x.exe /usr/bin/$x-${PN}
 	done
 
-	newicon ${S}/tools/assistant/images/appicon.png assistant-${PV_MAJ}.png
-	newicon ${S}/tools/designer/designer/images/designer_appicon.png designer-${PV_MAJ}.png
-	newicon ${S}/tools/linguist/linguist/images/appicon.png linguist-${PV_MAJ}.png
-	newicon ${S}/tools/qtconfig/images/appicon.png qtconfig-${PV_MAJ}.png
+	newicon ${S}/tools/assistant/images/appicon.png assistant-${PN}.png
+	newicon ${S}/tools/designer/designer/images/designer_appicon.png designer-${PN}.png
+	newicon ${S}/tools/linguist/linguist/images/appicon.png linguist-${PN}.png
+	newicon ${S}/tools/qtconfig/images/appicon.png qtconfig-${PN}.png
 
-	make_desktop_entry assistant-${PV_MAJ} "Qt${PV_MAJ} Assistant" \
-		assistant-${PV_MAJ}.png "Development;Qt"
-	make_desktop_entry designer-${PV_MAJ} "Qt${PV_MAJ} Designer" \
-		designer-${PV_MAJ}.png "Development;GUIDesigner;Qt"
-	make_desktop_entry linguist-${PV_MAJ} "Qt${PV_MAJ} Linguist" \
-		linguist-${PV_MAJ}.png "Development;Translation;Qt"
-	make_desktop_entry qtconfig-${PV_MAJ} "Qt${PV_MAJ} Configuration" \
-		qtconfig-${PV_MAJ}.png "Settings;DesktopSettings;Qt"
+	make_desktop_entry assistant-${PN} "Qt${PV_MAJ} Assistant" \
+		assistant-${PN}.png "Development;Qt"
+	make_desktop_entry designer-${PN} "Qt${PV_MAJ} Designer" \
+		designer-${PN}.png "Development;GUIDesigner;Qt"
+	make_desktop_entry linguist-${PN} "Qt${PV_MAJ} Linguist" \
+		linguist-${PN}.png "Development;Translation;Qt"
+	make_desktop_entry qtconfig-${PN} "Qt${PV_MAJ} Configuration" \
+		qtconfig-${PN}.png "Settings;DesktopSettings;Qt"
 
 	echo ">>> Installing libraries..."
 
@@ -178,51 +186,46 @@ src_install() {
 	dodoc ${S}/LICENSE.{G,Q}PL ${S}/PLATFORMS ${S}/README-QT.TXT ${S}/changes-${PV}
 }
 
-PKG_NAMES="${PN} ${PN}-assistant ${PN}-designer ${PN}-linguist ${PN}-devel"
-PKG_HINTS="setup assistant designer linguist devel"
-n=0
-PKG_CONTENTS[$((n++))]="
+PKG_NAMES="${PN} lib${PN} lib${PN}-devel ${PN}-devel-tools ${PN}-doc ${PN}-qtconfig"
+libqt3_CONTENTS="
 	--exclude=designer
 	${QSYSCONFDIR#/}
 	usr/bin/*.dll
-	usr/bin/qtconfig-${PV_MAJ}
-	${QBINDIR#/}/qtconfig.exe
 	${QPLUGINDIR#/}
-	usr/share/applications/qtconfig-${PV_MAJ}.desktop
-	usr/share/doc
-	usr/share/pixmaps/qtconfig-${PV_MAJ}.png
+	usr/share/doc/
 	${QTRANSLATIONSDIR#/}
 "
-PKG_CONTENTS[$((n++))]="
-	usr/bin/assistant-${PV_MAJ}
+qt3_devel_tools_CONTENTS="
+	--exclude=qtconfig*
+	usr/bin/assistant-${PN}
+	usr/bin/designer-${PN}
+	usr/bin/linguist-${PN}
 	${QBINDIR#/}/assistant.exe
-	usr/share/applications/assistant-${PV_MAJ}.desktop
-	usr/share/pixmaps/assistant-${PV_MAJ}.png
-	${QDOCDIR#/}
-"
-PKG_CONTENTS[$((n++))]="
-	usr/bin/designer-${PV_MAJ}
 	${QBINDIR#/}/designer.exe
-	${QPLUGINDIR#/}/designer
-	usr/share/applications/designer-${PV_MAJ}.desktop
-	usr/share/pixmaps/designer-${PV_MAJ}.png
+	${QBINDIR#/}/linguist.exe
+	${QPLUGINDIR#/}/designer/
+	usr/share/applications/
+	usr/share/pixmaps/
 	${QTEMPLATESDIR#/}
 "
-PKG_CONTENTS[$((n++))]="
-	usr/bin/linguist-${PV_MAJ}
-	usr/bin/lrelease-${PV_MAJ}
-	usr/bin/lupdate-${PV_MAJ}
-	${QBINDIR#/}/l*
-	usr/share/applications/linguist-${PV_MAJ}.desktop
-	usr/share/pixmaps/linguist-${PV_MAJ}.png
+qt3_doc_CONTENTS="${QDOCDIR#/}"
+qt3_qtconfig_CONTENTS="
+	usr/bin/qtconfig-${PN}
+	${QBINDIR#/}/qtconfig.exe
+	usr/share/applications/qtconfig-${PN}.desktop
+	usr/share/pixmaps/qtconfig-${PN}.png
 "
-PKG_CONTENTS[$((n++))]="
+libqt3_devel_CONTENTS="
 	etc/profile.d/
-	usr/bin/qmake-${PV_MAJ}
+	usr/bin/lrelease-${PN}
+	usr/bin/lupdate-${PN}
+	usr/bin/qmake-${PN}
 	${QINCLUDEDIR#/}
 	usr/lib/pkgconfig/
 	${QPREFIX#/}/.qmake.cache
 	${QBINDIR#/}/findtr
+	${QBINDIR#/}/lrelease.exe
+	${QBINDIR#/}/lupdate.exe
 	${QBINDIR#/}/moc.exe
 	${QBINDIR#/}/qm2ts.exe
 	${QBINDIR#/}/qt20fix
@@ -233,6 +236,5 @@ PKG_CONTENTS[$((n++))]="
 	${QLIBDIR#/}
 	${QMKSPECSDIR#/}
 "
-unset n
 
 DIFF_EXCLUDES="3rdparty libqt-mt.la moc_lex.* moc_yacc.*"

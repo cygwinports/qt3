@@ -1,4 +1,0 @@
-category: KDE X11
-requires: cygwin libGL1 libGLU1 libSM6 libX11_6 libXcursor1 libXext6 libXft2 libXi6 libXmu6 libXrandr2 libXrender1 libaudio2 libfontconfig1 libfreetype26 minires
-sdesc: "C++ GUI application framework (runtime library, qtconfig)"
-ldesc: "Qt is a multiplatform C++ GUI application framework."

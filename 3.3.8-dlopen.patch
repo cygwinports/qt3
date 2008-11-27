@@ -1,0 +1,22 @@
+--- origsrc/qt-x11-free-3.3.8/src/tools/qgpluginmanager.cpp	2007-02-02 08:01:04.000000000 -0600
++++ src/qt-x11-free-3.3.8/src/tools/qgpluginmanager.cpp	2007-10-28 22:15:48.359375000 -0500
+@@ -314,7 +314,7 @@
+     if ( !enabled() || !QDir( path ).exists( ".", TRUE ) )
+ 	return;
+ 
+-#if defined(Q_OS_WIN32)
++#if defined(Q_OS_WIN32) || defined(Q_OS_CYGWIN)
+     QString filter = "*.dll";
+ #elif defined(Q_OS_MACX)
+     QString filter = "*.dylib; *.so; *.bundle";
+--- origsrc/qt-x11-free-3.3.8/src/tools/qlibrary.cpp	2007-02-02 08:01:04.000000000 -0600
++++ src/qt-x11-free-3.3.8/src/tools/qlibrary.cpp	2007-10-28 22:15:48.359375000 -0500
+@@ -395,7 +395,7 @@
+ 
+     QString filename = libfile;
+ 
+-#if defined(Q_WS_WIN)
++#if defined(Q_WS_WIN) || defined(Q_OS_CYGWIN)
+     if ( filename.findRev( '.' ) <= filename.findRev( '/' ) )
+ 	filename += ".dll";
+ #else

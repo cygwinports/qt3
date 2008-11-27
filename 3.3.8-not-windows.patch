@@ -1,0 +1,33 @@
+--- origsrc/qt-x11-free-3.3.8/src/kernel/qapplication.cpp	2007-02-02 08:01:16.000000000 -0600
++++ src/qt-x11-free-3.3.8/src/kernel/qapplication.cpp	2007-10-28 22:15:48.312500000 -0500
+@@ -2890,7 +2890,7 @@
+   of Qt only.
+ */
+ 
+-#if defined(Q_OS_CYGWIN)
++#if defined(Q_OS_WIN32)
+ Qt::WindowsVersion QApplication::winVersion()
+ {
+     return qt_winver;
+--- origsrc/qt-x11-free-3.3.8/src/network/qdns.cpp	2007-02-02 08:01:09.000000000 -0600
++++ src/qt-x11-free-3.3.8/src/network/qdns.cpp	2007-10-28 22:15:48.343750000 -0500
+@@ -2274,7 +2274,7 @@
+ }
+ #endif
+ 
+-#if defined(Q_OS_WIN32) || defined(Q_OS_CYGWIN)
++#if defined(Q_OS_WIN32)
+ 
+ #if defined(Q_DNS_SYNCHRONOUS)
+ void QDns::doSynchronousLookup()
+--- origsrc/qt-x11-free-3.3.8/src/tools/qglobal.cpp	2007-10-28 22:14:25.828125000 -0500
++++ src/qt-x11-free-3.3.8/src/tools/qglobal.cpp	2007-10-28 22:15:48.359375000 -0500
+@@ -247,7 +247,7 @@
+     CFRelease(cfmstr);
+     return newStr;
+ }
+-#elif defined(Q_OS_WIN32) || defined(Q_OS_CYGWIN) || defined(Q_OS_TEMP)
++#elif defined(Q_OS_WIN32) || defined(Q_OS_TEMP)
+ bool qt_winunicode;
+ # ifdef Q_OS_TEMP
+   DWORD qt_cever = 0;
