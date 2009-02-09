@@ -1,5 +1,5 @@
 category: KDE X11
-requires: cygwin libaudio2 libfontconfig1 libfreetype26 libGL1 libICE6 libjpeg62 libmng1 libpng12 libSM6 libX11_6 libXcursor1 libXext6 libXft2 libXi6 libXmu6 libXrandr2 libXrender1 minires
+requires: cygwin libaudio2 libfontconfig1 libfreetype6 libGL1 libICE6 libjpeg62 libmng1 libpng12 libSM6 libX11_6 libXcursor1 libXext6 libXft2 libXi6 libXinerama1 libXmu6 libXrandr2 libXrender1 minires zlib
 external-source: qt3
 sdesc: "C++ GUI application framework (runtime library)"
 ldesc: "Qt is a multiplatform C++ GUI application framework."
