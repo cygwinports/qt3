@@ -70,17 +70,14 @@ src_compile() {
 		-sm -xft -xinerama -xkb -xrandr -xrender -xshape \
 		-qt-gif -plugin-imgfmt-jpeg -plugin-imgfmt-mng -plugin-imgfmt-png \
 		-system-libjpeg -system-libmng -system-libpng -system-zlib \
-		-no-exceptions -no-g++-exceptions \
-		-lresolv \
 		-no-dlopen-opengl \
 		-enable-module=opengl \
 		-qt-style-cde -qt-style-compact -qt-style-motif -qt-style-motifplus \
 		-qt-style-platinum -qt-style-sgi -qt-style-windows \
-		-no-ipv6 \
 		-no-cups \
 		-system-nas-sound \
 		-no-sql-ibase \
-		-plugin-sql-mysql -I/usr/include/mysql -L/usr/lib/mysql \
+		-no-sql-mysql \
 		-no-sql-odbc \
 		-plugin-sql-psql -I/usr/include/postgresql/server \
 		-plugin-sql-sqlite \

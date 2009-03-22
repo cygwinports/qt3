@@ -3,42 +3,40 @@ qt3
 Qt is a multiplatform C++ GUI application framework.
 
 Runtime requirements:
-  cygwin-1.5.24-2
-  libaudio2-1.9.1-2
-  libfontconfig1-2.6.0-1
-  libfreetype6-2.3.8-1
-  libGL1-7.2-2
-  libICE6-1.0.4-2
-  libSM6-1.1.0-1
-  libX11_6-1.1.5-2
-  libXcursor1-1.1.9-2
-  libXext6-1.0.4-1
-  libXft2-2.1.13-1
-  libXi6-1.1.3-2
-  libXinerama1-1.0.3-1
-  libXmu6-1.0.4-1
-  libXrandr2-1.2.3-1
-  libXrender1-0.9.4-2
-  minires-1.01-1
-  zlib-1.2.3-2
-
-Plugin requirements:
-  libjpeg62-6b-12
+  cygwin-1.7.0-45
+  libaudio2-1.9.2-1
+  libfontconfig1-2.6.0-10
+  libfreetype6-2.3.9-1
+  libgcc1-4.3.2-2
+  libGL1-7.2-10
+  libICE6-1.0.4-10
+  libjpeg62-6b-20
   libmng1-1.0.10-1
-  libpng12-1.2.34-1
-  libmysqlclient15-5.0.75-1
+  libpng12-1.2.35-10
   libpq5-8.2.11-1
+  libstdc++6-4.3.2-2
+  libSM6-1.1.0-10
+  libX11_6-1.2-10
+  libXcursor1-1.1.9-10
+  libXext6-1.0.5-10
+  libXft2-2.1.13-10
+  libXi6-1.2.1-10
+  libXinerama1-1.0.3-10
+  libXmu6-1.0.4-10
+  libXrandr2-1.3.0-10
+  libXrender1-0.9.4-10
+  zlib0-1.2.3-10
 
 Build requirements:
 (besides corresponding -devel packages)
   binutils-20080624-2
   bison-2.3-1
-  cygport-0.4.3-1
+  cygport-0.9.6-1
   flex-2.5.35-1
-  gawk-3.1.6-1
-  gcc-core-3.4.4-3
-  gcc-g++-3.4.4-3
-  make-3.81-1
+  gawk-3.1.6-2
+  gcc4-core-4.3.2-2
+  gcc4-g++-4.3.2-2
+  make-3.81-2
   sed-4.1.5-2
 
 Canonical homepage:
@@ -77,14 +75,13 @@ Files included in the binary packages:
   /usr/lib/qt3/plugins/sqldrivers/libqsqlite.dll
   /usr/lib/qt3/plugins/sqldrivers/libqsqlmysql.dll
   /usr/lib/qt3/plugins/sqldrivers/libqsqlpsql.dll
-  /usr/share/doc/qt3-3.3.8b/changes-3.3.8b
-  /usr/share/doc/qt3-3.3.8b/FAQ
-  /usr/share/doc/qt3-3.3.8b/INSTALL
-  /usr/share/doc/qt3-3.3.8b/LICENSE.GPL
-  /usr/share/doc/qt3-3.3.8b/LICENSE.QPL
-  /usr/share/doc/qt3-3.3.8b/PLATFORMS
-  /usr/share/doc/qt3-3.3.8b/README
-  /usr/share/doc/qt3-3.3.8b/README-QT.TXT
+  /usr/share/doc/qt3/changes-3.3.8b
+  /usr/share/doc/qt3/FAQ
+  /usr/share/doc/qt3/LICENSE.GPL
+  /usr/share/doc/qt3/LICENSE.QPL
+  /usr/share/doc/qt3/PLATFORMS
+  /usr/share/doc/qt3/README
+  /usr/share/doc/qt3/README-QT.TXT
   /usr/share/qt3/translations/qt_ar.qm
   /usr/share/qt3/translations/qt_ar.ts
   /usr/share/qt3/translations/qt_cs.qm
@@ -572,51 +569,8 @@ Files included in the binary packages:
 
 Port Notes:
 
------ version 3.3.8b-2 -----
-Enabled Xinerama support.
-
------ version 3.3.8b-1 -----
-Version bump.  Rearranged package layout.
-
------ version 3.3.8-4 -----
-Patch from Gentoo for CVE-2007-4137.
-
------ version 3.3.8-3 -----
-<qconfig.h> and <qmodules.h> were missing from -2.
-
------ version 3.3.8-2 -----
-Patch for CVE-2007-3388.
-Rearranged binary packages.
-
------ version 3.3.8-1 -----
-Version bump.
-
------ version 3.3.7-1 -----
-Version bump.
-Added NAS sound support and MySQL plugin.
-
------ version 3.3.6-1 -----
-Version bump, built for modular X11.
-Cygwin snapshot 20060527 or later is required for proper operation of Qt.
-
------ version 3.3.5-1 -----
-Version bump.
-
-* QTDIR is no longer defined system-wide, in order to allow parallel 
-  installations of upcoming qt4. Instead, define it when running qmake
-  or configure.
-* A symlink /usr/lib/qt3/include -> /usr/include/qt3 is now included.
-* lrelease, lupdate, moc, and uic have -qt3 symlinks in /usr/bin.
-* man3 pages removed; instead, use html docs with assistant.
-
------ version 3.3.4-2 -----
-Rebuilt with gcc-3.4; 
-qtconfig now included in the runtime package;
-Moved all bins under $(QTDIR)/bin with symlinks in /usr/bin;
-Created .desktop files for assistant, designer, linguist, and qtconfig.
-
------ version 3.3.4-1 -----
-Initial release for Cygwin.
+----- version 3.3.8b-10 -----
+Initial release for Cygwin 1.7.
 
 
 Cygwin port maintained by:
