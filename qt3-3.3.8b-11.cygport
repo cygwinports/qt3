@@ -18,7 +18,6 @@ PATCH_URI="
 	3.3.8-not-windows.patch
 	3.3.8-odbc32.patch
 	3.3.8-qmake.patch
-	3.3.8-static-const.patch
 	3.3.8b-moc-syntax-error.patch
 "
 SRC_DIR=${ORIG_PN}-${PV}
@@ -49,7 +48,6 @@ src_compile() {
 
 	cd ${B}
 
-	export CFLAGS CXXFLAGS LDFLAGS
 	export PATH="${B}/bin:${B}/lib:${PATH}"
 
 	${S}/configure \
@@ -111,13 +109,13 @@ src_install() {
 	newicon ${S}/tools/qtconfig/images/appicon.png qtconfig-${PN}.png
 
 	make_desktop_entry assistant-${PN} "Qt${PV_MAJ} Assistant" \
-		assistant-${PN}.png "Development;Qt"
+	                   assistant-${PN}.png "Development;Qt"
 	make_desktop_entry designer-${PN} "Qt${PV_MAJ} Designer" \
-		designer-${PN}.png "Development;GUIDesigner;Qt"
+	                   designer-${PN}.png "Development;GUIDesigner;Qt"
 	make_desktop_entry linguist-${PN} "Qt${PV_MAJ} Linguist" \
-		linguist-${PN}.png "Development;Translation;Qt"
+	                   linguist-${PN}.png "Development;Translation;Qt"
 	make_desktop_entry qtconfig-${PN} "Qt${PV_MAJ} Configuration" \
-		qtconfig-${PN}.png "Settings;DesktopSettings;Qt"
+	                   qtconfig-${PN}.png "Settings;DesktopSettings;Qt"
 
 	echo ">>> Installing libraries..."
 
@@ -222,7 +220,7 @@ libqt3_devel_CONTENTS="
 	${QPREFIX#/}/.qmake.cache
 	${QBINDIR#/}/findtr
 	${QBINDIR#/}/lrelease.exe
-	${QBINDIR#/}/lupdate.exe
+	${QBINDIR#/}/lupdate.exe*
 	${QBINDIR#/}/moc.exe
 	${QBINDIR#/}/qm2ts.exe
 	${QBINDIR#/}/qt20fix

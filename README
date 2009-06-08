@@ -3,7 +3,7 @@ qt3
 Qt is a multiplatform C++ GUI application framework.
 
 Runtime requirements:
-  cygwin-1.7.0-45
+  cygwin-1.7.0-48
   libaudio2-1.9.2-1
   libfontconfig1-2.6.0-10
   libfreetype6-2.3.9-1
@@ -542,6 +542,7 @@ Files included in the binary packages:
   /usr/lib/qt3/bin/findtr
   /usr/lib/qt3/bin/lrelease.exe
   /usr/lib/qt3/bin/lupdate.exe
+  /usr/lib/qt3/bin/lupdate.exe.manifest
   /usr/lib/qt3/bin/moc.exe
   /usr/lib/qt3/bin/qm2ts.exe
   /usr/lib/qt3/bin/qmake.exe
@@ -568,6 +569,11 @@ Files included in the binary packages:
 ------------------
 
 Port Notes:
+
+----- version 3.3.8b-11 -----
+Removed const struct workaround hack that is no longer necessary
+with -Wl,--enable-auto-import.
+Added .manifest file to lupdate to work around UAC issues.
 
 ----- version 3.3.8b-10 -----
 Initial release for Cygwin 1.7.
