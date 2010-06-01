@@ -1,7 +1,6 @@
 HOMEPAGE="http://www.trolltech.com/products/qt/"
 ORIG_PN="qt-x11-free"
-SRC_URI="ftp://ftp.trolltech.com/qt/source/${ORIG_PN}-${PV}.tar.gz"
-#SRC_URI="http://ftp.silug.org/mirrors/ftp.trolltech.com/qt/source/${ORIG_PN}-${PV}.tar.gz"
+SRC_URI="mirror://qt/qt/source/${ORIG_PN}-${PV}.tar.gz"
 PATCH_URI="
 	mirror://portage/x11-libs/qt/files/qt-3.3.8-uic-fix.patch
 	mirror://portage/x11-libs/qt/files/0001-dnd_optimization.patch
