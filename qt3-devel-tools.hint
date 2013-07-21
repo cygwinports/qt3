@@ -1,5 +1,0 @@
-category: Devel KDE X11
-requires: libgcc1 libstdc++6 libqt3
-external-source: qt3
-sdesc: "C++ GUI application framework (Assistant, Designer, Linguist)"
-ldesc: "Qt is a multiplatform C++ GUI application framework."

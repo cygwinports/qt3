@@ -1,0 +1,241 @@
+NAME="qt3"
+VERSION=3.3.8b
+RELEASE=12
+CATEGORY="Libs"
+SUMMARY="C++ GUI application framework"
+DESCRIPTION="Qt is a multiplatform C++ GUI application framework."
+HOMEPAGE="http://qt-project.org/"
+SRC_URI="http://download.qt-project.org/archive/qt/3/qt-x11-free-${VERSION}.tar.gz"
+SRC_DIR="qt-x11-free-${VERSION}"
+PATCH_URI="
+	fedora/qt-3.3.4-print-CJK.patch
+	fedora/qt-3.0.5-nodebug.patch
+	fedora/qt-3.1.0-makefile.patch
+	fedora/qt-x11-free-3.3.7-umask.patch
+	fedora/qt-x11-free-3.3.2-quiet.patch
+	fedora/qt-uic-nostdlib.patch
+	fedora/qt-x11-free-3.3.6-qfontdatabase_x11.patch
+	fedora/qt-3.3.3-gtkstyle.patch
+	fedora/qt-x11-free-3.3.8b-gcc4-buildkey.patch
+	fedora/qt-x11-free-3.3.5-uic.patch
+	fedora/qt-x11-free-3.3.8b-uic-multilib.patch
+	fedora/qt-3.3.6-fontrendering-ml_IN-209097.patch
+	fedora/qt-3.3.8-fontrendering-as_IN-209972.patch
+	fedora/qt-3.3.6-fontrendering-te_IN-211259.patch
+	fedora/qt-3.3.6-fontrendering-214371.patch
+	fedora/qt-3.3.8-fontrendering-#214570.patch
+	fedora/qt-3.3.6-fontrendering-ml_IN-209974.patch
+	fedora/qt-3.3.6-fontrendering-ml_IN-217657.patch
+	fedora/qt-3.3.6-fontrendering-gu-228452.patch
+	fedora/qt-x11-free-3.3.8-odbc.patch
+	fedora/qt-x11-free-3.3.8b-sane_defaults.patch
+	fedora/qt-x11-free-3.3.8b-cstddef.patch
+	fedora/qt-x11-free-3.3.8b-qlocale-aliasing.patch
+	fedora/qt-x11-free-3.3.8b-system-sqlite2.patch
+	fedora/qt-x11-free-3.3.8b-qimage-parentheses.patch
+	fedora/qt-x11-free-3.3.8b-system-zlib-header.patch
+	fedora/qt-3.3.8-libpng15.patch
+	http://pkgs.fedoraproject.org/repo/pkgs/qt3/qt-x11-immodule-unified-qt3.3.8-20071116.diff.bz2/aab0717be8ffc3beeb3791c0c42a5c24/qt-x11-immodule-unified-qt3.3.8-20071116.diff.bz2
+	fedora/qt-x11-immodule-unified-qt3.3.5-20051012-quiet.patch
+	fedora/qt-x11-free-3.3.8b-fix-key-release-event-with-imm.diff
+	fedora/qt-x11-free-3.3.6-qt-x11-immodule-unified-qt3.3.5-20060318-resetinputcontext.patch
+	fedora/0038-dragobject-dont-prefer-unknown.patch
+	fedora/0047-fix-kmenu-width.diff
+	fedora/0048-qclipboard_hack_80072.patch
+	fedora/0056-khotkeys_input_84434.patch
+	fedora/0073-xinerama-aware-qpopup.patch
+	fedora/0079-compositing-types.patch
+	fedora/0080-net-wm-sync-request-2.patch
+	fedora/0084-compositing-properties.patch
+	fedora/qt-x11-free-3.3.4-fullscreen.patch
+	fedora/qt-x11-free-3.3.8b-gcc43.patch
+	3.3.8-configure-misc.patch
+	3.3.8-dlopen.patch
+	3.3.8-mkspecs.patch
+	3.3.8-not-windows.patch
+	3.3.8-qmake.patch
+	3.3.8b-moc-syntax-error.patch
+"
+
+CYGPORT_USE_UNSTABLE_API=1
+src_patch_hook() {
+	sh ./make-symlinks.sh
+
+	pushd src/moc
+
+	flex moc.l
+	rm -f moc_lex.cpp
+	mv lex.yy.c moc_lex.cpp
+
+	byacc -d moc.y
+	rm -f moc_yacc.{cpp,h}
+	mv y.tab.c moc_yacc.cpp
+	mv y.tab.h moc_yacc.h
+
+	popd
+}
+
+QPREFIX="/usr/lib/${NAME}"
+QBINDIR="${QPREFIX}/bin"
+QINCLUDEDIR="/usr/include/${NAME}"
+QLIBDIR="${QPREFIX}/lib"
+QPLUGINDIR="/usr/lib/${NAME}/plugins"
+QDATADIR="/usr/share/${NAME}"
+QDOCDIR="${QDATADIR}/doc"
+QMKSPECSDIR="${QDATADIR}/mkspecs"
+QTRANSLATIONSDIR="${QDATADIR}/translations"
+QSYSCONFDIR="/etc/${NAME}"
+
+src_compile() {
+	cd ${B}
+
+	export PATH="${B}/bin:${B}/lib:${PATH}"
+
+	echo \
+	${S}/configure \
+		-prefix ${QPREFIX} \
+		-bindir ${QBINDIR} \
+		-headerdir ${QINCLUDEDIR} \
+		-libdir ${QLIBDIR} \
+		-plugindir ${QPLUGINDIR} \
+		-datadir ${QDATADIR} \
+		-docdir ${QDOCDIR} \
+		-sysconfdir ${QSYSCONFDIR} \
+		-translationdir ${QTRANSLATIONSDIR} \
+		-platform cygwin-g++ -xplatform cygwin-g++ \
+		-fast -verbose -continue \
+		-release -shared -thread \
+		-no-pch -stl -no-exceptions \
+		-largefile -tablet \
+		-sm -xft -xinerama -xkb -xrandr -xrender -xshape \
+		-qt-gif -qt-imgfmt-jpeg -qt-imgfmt-mng -qt-imgfmt-png \
+		-system-libjpeg -system-libmng -system-libpng -system-zlib \
+		-no-dlopen-opengl \
+		-enable-module=opengl \
+		-qt-style-cde -qt-style-compact -qt-style-motif -qt-style-motifplus \
+		-qt-style-platinum -qt-style-sgi -qt-style-windows \
+		-no-cups \
+		-system-nas-sound \
+		-no-sql-ibase \
+		-plugin-sql-mysql \
+		-plugin-sql-odbc \
+		-plugin-sql-psql \
+		-no-sql-sqlite \
+		|| error "configure failed"
+
+	cygmake src-qmake
+
+	pushd plugins/src/sqldrivers/mysql
+	QTDIR=${S} \
+	${B}/bin/qmake -o Makefile \
+		INCLUDEPATH+=/usr/include/mysql \
+		${S}/plugins/src/sqldrivers/mysql/mysql.pro
+	popd
+
+	pushd plugins/src/sqldrivers/psql
+	QTDIR=${S} \
+	${B}/bin/qmake -o Makefile \
+		INCLUDEPATH+=/usr/include/postgresql/server \
+		${S}/plugins/src/sqldrivers/psql/psql.pro
+	popd
+
+	cygmake src-moc sub-src sub-plugins sub-tools \
+		UIC="${B}/bin/uic -nostdlib -nounload -L ${B}/plugins"
+}
+
+src_install() {
+	cd ${B}
+	cygmake install INSTALL_ROOT=${D}
+
+	dodir /usr/bin
+
+	pushd ${D}${QLIBDIR}
+	mv cygqt-mt-3.dll cygqui-1.dll ${D}/usr/bin/
+	mv cygqt-mt-3.prl libqt-mt.prl
+	mv cygqui-1.prl libqui.prl
+	mv pkgconfig/ ${D}/usr/lib/
+	popd
+
+	dosym qt-mt.pc /usr/lib/pkgconfig/qt.pc
+
+	ln -sf ../../include/${NAME} ${D}${QPREFIX}/include
+
+	rm -fr ${D}${QMKSPECSDIR}/default
+	rm -f  ${D}${QMKSPECSDIR}/cygwin-g++/cygwin-g++
+	dosym cygwin-g++ ${QMKSPECSDIR}/default
+
+	for x in assistant designer linguist lrelease lupdate qtconfig qmake
+	do
+		dosym ../lib/${NAME}/bin/$x.exe /usr/bin/$x-${NAME}
+	done
+
+	exeinto ${QBINDIR}
+	doexe ${S}/bin/{findtr,qt20fix,qtrename140}
+
+	newicon ${S}/tools/assistant/images/appicon.png assistant-${NAME}.png
+	newicon ${S}/tools/designer/designer/images/designer_appicon.png designer-${NAME}.png
+	newicon ${S}/tools/linguist/linguist/images/appicon.png linguist-${NAME}.png
+	newicon ${S}/tools/qtconfig/images/appicon.png qtconfig-${NAME}.png
+
+	make_desktop_entry assistant-${NAME} "Qt3 Assistant" \
+	                   assistant-${NAME}.png "Development;Qt"
+	make_desktop_entry designer-${NAME} "Qt3 Designer" \
+	                   designer-${NAME}.png "Development;GUIDesigner;Qt"
+	make_desktop_entry linguist-${NAME} "Qt3 Linguist" \
+	                   linguist-${NAME}.png "Development;Translation;Qt"
+	make_desktop_entry qtconfig-${NAME} "Qt3 Configuration" \
+	                   qtconfig-${NAME}.png "Settings;DesktopSettings;Qt"
+
+	dodoc ${S}/LICENSE.{G,Q}PL ${S}/PLATFORMS ${S}/README-QT.TXT ${S}/changes-${VERSION}
+}
+
+PKG_NAMES="${NAME} lib${NAME} lib${NAME}-devel ${NAME}-devel-tools ${NAME}-doc ${NAME}-qtconfig"
+libqt3_CONTENTS="
+	--exclude=designer
+	usr/bin/*.dll
+	${QPLUGINDIR#/}
+	usr/share/doc/
+	${QTRANSLATIONSDIR#/}
+"
+qt3_devel_tools_CONTENTS="
+	--exclude=qtconfig*
+	usr/bin/assistant-${NAME}
+	usr/bin/designer-${NAME}
+	usr/bin/linguist-${NAME}
+	${QBINDIR#/}/assistant.exe
+	${QBINDIR#/}/designer.exe
+	${QBINDIR#/}/linguist.exe
+	${QPLUGINDIR#/}/designer/
+	usr/share/applications/
+	usr/share/pixmaps/
+	${QDATADIR#/}/phrasebooks/
+	${QDATADIR#/}/templates/
+"
+qt3_doc_CONTENTS="${QDOCDIR#/}"
+qt3_qtconfig_CONTENTS="
+	usr/bin/qtconfig-${NAME}
+	${QBINDIR#/}/qtconfig.exe
+	usr/share/applications/qtconfig-${NAME}.desktop
+	usr/share/pixmaps/qtconfig-${NAME}.png
+"
+libqt3_devel_CONTENTS="
+	usr/bin/lrelease-${NAME}
+	usr/bin/lupdate-${NAME}
+	usr/bin/qmake-${NAME}
+	${QINCLUDEDIR#/}
+	usr/lib/pkgconfig/
+	${QBINDIR#/}/findtr
+	${QBINDIR#/}/lrelease.exe
+	${QBINDIR#/}/lupdate.exe*
+	${QBINDIR#/}/moc.exe
+	${QBINDIR#/}/qm2ts.exe
+	${QBINDIR#/}/qt20fix
+	${QBINDIR#/}/qtrename140
+	${QBINDIR#/}/qmake.exe
+	${QBINDIR#/}/uic.exe
+	${QPREFIX#/}/include
+	${QLIBDIR#/}
+	${QMKSPECSDIR#/}
+"
+
+DIFF_EXCLUDES="3rdparty libqt-mt.la moc_lex.* moc_yacc.*"
