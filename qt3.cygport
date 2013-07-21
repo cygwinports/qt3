@@ -163,7 +163,7 @@ src_install() {
 	rm -f  ${D}${QMKSPECSDIR}/cygwin-g++/cygwin-g++
 	dosym cygwin-g++ ${QMKSPECSDIR}/default
 
-	for x in assistant designer linguist lrelease lupdate qtconfig qmake
+	for x in assistant designer linguist lrelease lupdate moc qtconfig qmake uic
 	do
 		dosym ../lib/${NAME}/bin/$x.exe /usr/bin/$x-${NAME}
 	done
@@ -191,7 +191,8 @@ src_install() {
 PKG_NAMES="${NAME} lib${NAME} lib${NAME}-devel ${NAME}-devel-tools ${NAME}-doc ${NAME}-qtconfig"
 libqt3_CONTENTS="
 	--exclude=designer
-	usr/bin/*.dll
+	usr/bin/cygqt-mt-3.dll
+	usr/bin/cygqui-1.dll
 	${QPLUGINDIR#/}
 	usr/share/doc/
 	${QTRANSLATIONSDIR#/}
@@ -220,7 +221,9 @@ qt3_qtconfig_CONTENTS="
 libqt3_devel_CONTENTS="
 	usr/bin/lrelease-${NAME}
 	usr/bin/lupdate-${NAME}
+	usr/bin/moc-${NAME}
 	usr/bin/qmake-${NAME}
+	usr/bin/uic-${NAME}
 	${QINCLUDEDIR#/}
 	usr/lib/pkgconfig/
 	${QBINDIR#/}/findtr
