@@ -188,7 +188,7 @@ src_install() {
 	dodoc ${S}/LICENSE.{G,Q}PL ${S}/PLATFORMS ${S}/README-QT.TXT ${S}/changes-${VERSION}
 }
 
-PKG_NAMES="${NAME} lib${NAME} lib${NAME}-devel ${NAME}-devel-tools ${NAME}-doc ${NAME}-qtconfig"
+PKG_NAMES="lib${NAME} lib${NAME}-devel ${NAME}-devel-tools ${NAME}-doc ${NAME}-qtconfig"
 libqt3_CONTENTS="
 	--exclude=designer
 	usr/bin/cygqt-mt-3.dll
@@ -197,6 +197,8 @@ libqt3_CONTENTS="
 	usr/share/doc/
 	${QTRANSLATIONSDIR#/}
 "
+qt3_devel_tools_CATEGORY="Devel"
+qt3_devel_tools_SUMMARY="${SUMMARY} (Development tools)"
 qt3_devel_tools_CONTENTS="
 	--exclude=qtconfig*
 	usr/bin/assistant-${NAME}
@@ -211,7 +213,11 @@ qt3_devel_tools_CONTENTS="
 	${QDATADIR#/}/phrasebooks/
 	${QDATADIR#/}/templates/
 "
+qt3_doc_CATEGORY="Doc"
+qt3_doc_SUMMARY="${SUMMARY} (Documentation)"
 qt3_doc_CONTENTS="${QDOCDIR#/}"
+qt3_qtconfig_CATEGORY="X11"
+qt3_qtconfig_SUMMARY="${SUMMARY} (Configuration utility)"
 qt3_qtconfig_CONTENTS="
 	usr/bin/qtconfig-${NAME}
 	${QBINDIR#/}/qtconfig.exe
