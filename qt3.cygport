@@ -91,7 +91,6 @@ src_compile() {
 
 	export PATH="${B}/bin:${B}/lib:${PATH}"
 
-	echo \
 	${S}/configure \
 		-prefix ${QPREFIX} \
 		-bindir ${QBINDIR} \
