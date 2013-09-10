@@ -118,7 +118,7 @@ src_compile() {
 		-no-sql-ibase \
 		-plugin-sql-mysql \
 		-plugin-sql-odbc \
-		${ARCH_i686+-plugin-sql-psql} \
+		-plugin-sql-psql \
 		-no-sql-sqlite \
 		|| error "configure failed"
 
@@ -131,14 +131,12 @@ src_compile() {
 		${S}/plugins/src/sqldrivers/mysql/mysql.pro
 	popd
 
-	if defined ARCH_i686; then
 	pushd plugins/src/sqldrivers/psql
 	QTDIR=${S} \
 	${B}/bin/qmake -o Makefile \
 		INCLUDEPATH+=/usr/include/postgresql/server \
 		${S}/plugins/src/sqldrivers/psql/psql.pro
 	popd
-	fi
 
 	cygmake src-moc sub-src sub-plugins sub-tools \
 		UIC="${B}/bin/uic -nostdlib -nounload -L ${B}/plugins"
