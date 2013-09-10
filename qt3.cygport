@@ -1,6 +1,6 @@
 NAME="qt3"
 VERSION=3.3.8b
-RELEASE=12
+RELEASE=13
 CATEGORY="Libs"
 SUMMARY="C++ GUI application framework"
 DESCRIPTION="Qt is a multiplatform C++ GUI application framework."
@@ -75,32 +75,21 @@ src_patch_hook() {
 	popd
 }
 
-QPREFIX="/usr/lib/${NAME}"
-QBINDIR="${QPREFIX}/bin"
-QINCLUDEDIR="/usr/include/${NAME}"
-QLIBDIR="${QPREFIX}/lib"
-QPLUGINDIR="/usr/lib/${NAME}/plugins"
-QDATADIR="/usr/share/${NAME}"
-QDOCDIR="${QDATADIR}/doc"
-QMKSPECSDIR="${QDATADIR}/mkspecs"
-QTRANSLATIONSDIR="${QDATADIR}/translations"
-QSYSCONFDIR="/etc/${NAME}"
-
 src_compile() {
 	cd ${B}
 
 	export PATH="${B}/bin:${B}/lib:${PATH}"
 
 	${S}/configure \
-		-prefix ${QPREFIX} \
-		-bindir ${QBINDIR} \
-		-headerdir ${QINCLUDEDIR} \
-		-libdir ${QLIBDIR} \
-		-plugindir ${QPLUGINDIR} \
-		-datadir ${QDATADIR} \
-		-docdir ${QDOCDIR} \
-		-sysconfdir ${QSYSCONFDIR} \
-		-translationdir ${QTRANSLATIONSDIR} \
+		-prefix /usr \
+		-bindir /usr/lib/qt3/bin \
+		-headerdir /usr/include/qt3 \
+		-libdir /usr/lib \
+		-plugindir /usr/lib/qt3/plugins \
+		-datadir /usr/share/qt3 \
+		-docdir /usr/share/qt3/doc \
+		-sysconfdir /etc/qt3 \
+		-translationdir /usr/share/qt3/translations \
 		-platform cygwin-g++ -xplatform cygwin-g++ \
 		-fast -verbose -continue \
 		-release -shared -thread \
@@ -148,100 +137,100 @@ src_install() {
 
 	dodir /usr/bin
 
-	pushd ${D}${QLIBDIR}
-	mv cygqt-mt-3.dll cygqui-1.dll ${D}/usr/bin/
-	mv pkgconfig/ ${D}/usr/lib/
-	popd
+	mv ${D}/usr/lib/*.dll ${D}/usr/bin/
+	# no public API in these
+	rm -f ${D}/usr/lib/lib{designercore,editor}.*
 
+	dosym libqt-mt.dll.a /usr/lib/libqt.dll.a
 	dosym qt-mt.pc /usr/lib/pkgconfig/qt.pc
 
-	ln -sf ../../include/${NAME} ${D}${QPREFIX}/include
+	ln -sf ../../include/qt3 ${D}/usr/lib/qt3/include
 
-	rm -fr ${D}${QMKSPECSDIR}/default
-	rm -f  ${D}${QMKSPECSDIR}/cygwin-g++/cygwin-g++
-	dosym cygwin-g++ ${QMKSPECSDIR}/default
+	rm -fr ${D}/usr/share/qt3/mkspecs/default
+	rm -f  ${D}/usr/share/qt3/mkspecs/cygwin-g++/cygwin-g++
+	dosym cygwin-g++ /usr/share/qt3/mkspecs/default
 
 	for x in assistant designer linguist lrelease lupdate moc qtconfig qmake uic
 	do
-		dosym ../lib/${NAME}/bin/$x.exe /usr/bin/$x-${NAME}
+		dosym ../lib/qt3/bin/$x.exe /usr/bin/$x-qt3
 	done
 
-	exeinto ${QBINDIR}
+	exeinto /usr/lib/qt3/bin
 	doexe ${S}/bin/{findtr,qt20fix,qtrename140}
 
-	newicon ${S}/tools/assistant/images/appicon.png assistant-${NAME}.png
-	newicon ${S}/tools/designer/designer/images/designer_appicon.png designer-${NAME}.png
-	newicon ${S}/tools/linguist/linguist/images/appicon.png linguist-${NAME}.png
-	newicon ${S}/tools/qtconfig/images/appicon.png qtconfig-${NAME}.png
+	newicon ${S}/tools/assistant/images/appicon.png assistant-qt3.png
+	newicon ${S}/tools/designer/designer/images/designer_appicon.png designer-qt3.png
+	newicon ${S}/tools/linguist/linguist/images/appicon.png linguist-qt3.png
+	newicon ${S}/tools/qtconfig/images/appicon.png qtconfig-qt3.png
 
-	make_desktop_entry assistant-${NAME} "Qt3 Assistant" \
-	                   assistant-${NAME}.png "Development;Qt"
-	make_desktop_entry designer-${NAME} "Qt3 Designer" \
-	                   designer-${NAME}.png "Development;GUIDesigner;Qt"
-	make_desktop_entry linguist-${NAME} "Qt3 Linguist" \
-	                   linguist-${NAME}.png "Development;Translation;Qt"
-	make_desktop_entry qtconfig-${NAME} "Qt3 Configuration" \
-	                   qtconfig-${NAME}.png "Settings;DesktopSettings;Qt"
+	make_desktop_entry assistant-qt3 "Qt3 Assistant" \
+	                   assistant-qt3.png "Development;Qt"
+	make_desktop_entry designer-qt3 "Qt3 Designer" \
+	                   designer-qt3.png "Development;GUIDesigner;Qt"
+	make_desktop_entry linguist-qt3 "Qt3 Linguist" \
+	                   linguist-qt3.png "Development;Translation;Qt"
+	make_desktop_entry qtconfig-qt3 "Qt3 Configuration" \
+	                   qtconfig-qt3.png "Settings;DesktopSettings;Qt"
 
 	dodoc ${S}/LICENSE.{G,Q}PL ${S}/PLATFORMS ${S}/README-QT.TXT ${S}/changes-${VERSION}
 }
 
-PKG_NAMES="lib${NAME} lib${NAME}-devel ${NAME}-devel-tools ${NAME}-doc ${NAME}-qtconfig"
+PKG_NAMES="libqt3 libqt3-devel qt3-devel-tools qt3-doc qt3-qtconfig"
 libqt3_CONTENTS="
 	--exclude=designer
 	usr/bin/cygqt-mt-3.dll
 	usr/bin/cygqui-1.dll
-	${QPLUGINDIR#/}
+	usr/lib/qt3/plugins/
 	usr/share/doc/
-	${QTRANSLATIONSDIR#/}
+	usr/share/qt3/translations/
 "
 qt3_devel_tools_CATEGORY="Devel"
 qt3_devel_tools_SUMMARY="${SUMMARY} (Development tools)"
 qt3_devel_tools_CONTENTS="
 	--exclude=qtconfig*
-	usr/bin/assistant-${NAME}
-	usr/bin/designer-${NAME}
-	usr/bin/linguist-${NAME}
-	${QBINDIR#/}/assistant.exe
-	${QBINDIR#/}/designer.exe
-	${QBINDIR#/}/linguist.exe
-	${QPLUGINDIR#/}/designer/
+	usr/bin/assistant-qt3
+	usr/bin/designer-qt3
+	usr/bin/linguist-qt3
+	usr/lib/qt3/bin/assistant.exe
+	usr/lib/qt3/bin/designer.exe
+	usr/lib/qt3/bin/linguist.exe
+	usr/lib/qt3/plugins/designer/
 	usr/share/applications/
 	usr/share/pixmaps/
-	${QDATADIR#/}/phrasebooks/
-	${QDATADIR#/}/templates/
+	usr/share/qt3/phrasebooks/
+	usr/share/qt3/templates/
 "
 qt3_doc_CATEGORY="Doc"
 qt3_doc_SUMMARY="${SUMMARY} (Documentation)"
-qt3_doc_CONTENTS="${QDOCDIR#/}"
+qt3_doc_CONTENTS="usr/share/qt3/doc/"
 qt3_qtconfig_CATEGORY="X11"
 qt3_qtconfig_SUMMARY="${SUMMARY} (Configuration utility)"
 qt3_qtconfig_CONTENTS="
-	usr/bin/qtconfig-${NAME}
-	${QBINDIR#/}/qtconfig.exe
-	usr/share/applications/qtconfig-${NAME}.desktop
-	usr/share/pixmaps/qtconfig-${NAME}.png
+	usr/bin/qtconfig-qt3
+	usr/lib/qt3/bin/qtconfig.exe
+	usr/share/applications/qtconfig-qt3.desktop
+	usr/share/pixmaps/qtconfig-qt3.png
 "
 libqt3_devel_CONTENTS="
-	usr/bin/lrelease-${NAME}
-	usr/bin/lupdate-${NAME}
-	usr/bin/moc-${NAME}
-	usr/bin/qmake-${NAME}
-	usr/bin/uic-${NAME}
-	${QINCLUDEDIR#/}
+	usr/bin/lrelease-qt3
+	usr/bin/lupdate-qt3
+	usr/bin/moc-qt3
+	usr/bin/qmake-qt3
+	usr/bin/uic-qt3
+	usr/include/qt3/
+	usr/lib/libq*
 	usr/lib/pkgconfig/
-	${QBINDIR#/}/findtr
-	${QBINDIR#/}/lrelease.exe
-	${QBINDIR#/}/lupdate.exe*
-	${QBINDIR#/}/moc.exe
-	${QBINDIR#/}/qm2ts.exe
-	${QBINDIR#/}/qt20fix
-	${QBINDIR#/}/qtrename140
-	${QBINDIR#/}/qmake.exe
-	${QBINDIR#/}/uic.exe
-	${QPREFIX#/}/include
-	${QLIBDIR#/}
-	${QMKSPECSDIR#/}
+	usr/lib/qt3/bin/findtr
+	usr/lib/qt3/bin/lrelease.exe
+	usr/lib/qt3/bin/lupdate.exe*
+	usr/lib/qt3/bin/moc.exe
+	usr/lib/qt3/bin/qm2ts.exe
+	usr/lib/qt3/bin/qt20fix
+	usr/lib/qt3/bin/qtrename140
+	usr/lib/qt3/bin/qmake.exe
+	usr/lib/qt3/bin/uic.exe
+	usr/lib/qt3/include
+	usr/share/qt3/mkspecs/
 "
 
 DIFF_EXCLUDES="3rdparty libqt-mt.la moc_lex.* moc_yacc.*"
