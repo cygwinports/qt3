@@ -1,18 +1,53 @@
 --- origsrc/qt-x11-free-3.3.8/qmake/generators/makefile.cpp	2007-02-02 08:01:28.000000000 -0600
 +++ src/qt-x11-free-3.3.8/qmake/generators/makefile.cpp	2007-10-28 22:15:48.296875000 -0500
-@@ -1378,7 +1378,11 @@
+@@ -1264,7 +1264,7 @@ MakefileGenerator::processPrlFile(QStrin
+ 	    dir = stem.left(slsh + 1);
+ 	    stem = stem.right(stem.length() - slsh - 1);
+ 	}
+-	if(stem.startsWith("lib")) {
++	if(stem.startsWith("lib") || stem.startsWith("cyg")) {
+ 	    hadlib = 1;
+ 	    stem = stem.right(stem.length() - 3);
+ 	}
+@@ -1273,6 +1273,13 @@ MakefileGenerator::processPrlFile(QStrin
+ 	    extn = stem.right(stem.length() - dot);
+ 	    stem = stem.left(dot);
+ 	}
++	if(!project->isEmpty("QMAKE_CYGWIN_SHLIB")) {
++	    int dash = stem.findRev('-');
++	    if(dash != -1) {
++		stem = stem.left(dash);
++	    }
++	}
++
+ 	if(stem == "qt" || stem == "qte" || stem == "qte-mt" || stem == "qt-mt") {
+ 	    if(stem.endsWith("-mt"))
+ 		stem = stem.left(stem.length() - 3); //lose the -mt
+@@ -1378,7 +1385,11 @@
  void
  MakefileGenerator::writePrlFile(QTextStream &t)
  {
 -    QString target = project->first("TARGET");
 +    QString target;
-+	if(!project->isEmpty("QMAKE_CYGWIN_SHLIB"))
-+	    target = project->first("L_TARGET");
-+	else
-+	    target = project->first("TARGET");
++    if(!project->isEmpty("QMAKE_CYGWIN_SHLIB"))
++	target = project->first("TARGET_");
++    else
++	target = project->first("TARGET");
      int slsh = target.findRev(Option::dir_sep);
      if(slsh != -1)
  	target = target.right(target.length() - slsh - 1);
+@@ -1434,6 +1448,11 @@ MakefileGenerator::write()
+ 	int dot = prl.find('.');
+ 	if(dot != -1)
+ 	    prl = prl.left(dot);
++	int dash = prl.findRev('-');
++	if(dash != -1)
++	    prl = prl.left(dash);
++	if(prl.startsWith("cyg"))
++	    prl.replace(0, 3, "lib");
+ 	prl += Option::prl_ext;
+ 	if(!project->isEmpty("DESTDIR"))
+ 	    prl.prepend(var("DESTDIR"));
 --- origsrc/qt-x11-free-3.3.8/qmake/generators/unix/unixmake.cpp	2007-02-02 08:01:27.000000000 -0600
 +++ src/qt-x11-free-3.3.8/qmake/generators/unix/unixmake.cpp	2007-10-28 22:15:48.296875000 -0500
 @@ -803,15 +803,13 @@
