@@ -1,6 +1,6 @@
 NAME="qt3"
 VERSION=3.3.8b
-RELEASE=13
+RELEASE=14
 CATEGORY="Libs"
 SUMMARY="C++ GUI application framework"
 DESCRIPTION="Qt is a multiplatform C++ GUI application framework."
@@ -35,6 +35,8 @@ PATCH_URI="
 	fedora/qt-x11-free-3.3.8b-qimage-parentheses.patch
 	fedora/qt-x11-free-3.3.8b-system-zlib-header.patch
 	fedora/qt-3.3.8-libpng15.patch
+	fedora/qt-x11-free-3.3.8b-#1037297.patch
+	fedora/qt-x11-free-3.3.8b-freetype251.patch
 	http://pkgs.fedoraproject.org/repo/pkgs/qt3/qt-x11-immodule-unified-qt3.3.8-20071116.diff.bz2/aab0717be8ffc3beeb3791c0c42a5c24/qt-x11-immodule-unified-qt3.3.8-20071116.diff.bz2
 	fedora/qt-x11-immodule-unified-qt3.3.5-20051012-quiet.patch
 	fedora/qt-x11-free-3.3.8b-fix-key-release-event-with-imm.diff
@@ -49,12 +51,14 @@ PATCH_URI="
 	fedora/0084-compositing-properties.patch
 	fedora/qt-x11-free-3.3.4-fullscreen.patch
 	fedora/qt-x11-free-3.3.8b-gcc43.patch
+	fedora/qt-x11-free-3.3.8b-CVE-2013-4549.patch
+	fedora/qt-x11-free-3.3.8b-CVE-2014-0190.patch
 	3.3.8-configure-misc.patch
 	3.3.8-dlopen.patch
 	3.3.8-mkspecs.patch
 	3.3.8-not-windows.patch
 	3.3.8-qmake.patch
-	3.3.8b-moc-syntax-error.patch
+	3.3.8-debuginfo.patch
 "
 
 CYGPORT_USE_UNSTABLE_API=1
@@ -79,6 +83,7 @@ src_compile() {
 	cd ${B}
 
 	export PATH="${B}/bin:${B}/lib:${PATH}"
+	export OPT_CXXFLAGS="${CXXFLAGS}"
 
 	${S}/configure \
 		-prefix /usr \
@@ -105,27 +110,11 @@ src_compile() {
 		-no-cups \
 		-system-nas-sound \
 		-no-sql-ibase \
-		-plugin-sql-mysql \
+		-plugin-sql-mysql -I/usr/include/mysql \
 		-plugin-sql-odbc \
-		-plugin-sql-psql \
+		-plugin-sql-psql -I/usr/include/postgresql/server \
 		-no-sql-sqlite \
 		|| error "configure failed"
-
-	cygmake src-qmake
-
-	pushd plugins/src/sqldrivers/mysql
-	QTDIR=${S} \
-	${B}/bin/qmake -o Makefile \
-		INCLUDEPATH+=/usr/include/mysql \
-		${S}/plugins/src/sqldrivers/mysql/mysql.pro
-	popd
-
-	pushd plugins/src/sqldrivers/psql
-	QTDIR=${S} \
-	${B}/bin/qmake -o Makefile \
-		INCLUDEPATH+=/usr/include/postgresql/server \
-		${S}/plugins/src/sqldrivers/psql/psql.pro
-	popd
 
 	cygmake src-moc sub-src sub-plugins sub-tools \
 		UIC="${B}/bin/uic -nostdlib -nounload -L ${B}/plugins"
@@ -133,7 +122,7 @@ src_compile() {
 
 src_install() {
 	cd ${B}
-	cygmake install INSTALL_ROOT=${D}
+	cygmake -j1 install INSTALL_ROOT=${D}
 
 	dodir /usr/bin
 
@@ -146,10 +135,21 @@ src_install() {
 
 	ln -sf ../../include/qt3 ${D}/usr/lib/qt3/include
 
-	rm -fr ${D}/usr/share/qt3/mkspecs/default
-	rm -f  ${D}/usr/share/qt3/mkspecs/cygwin-g++/cygwin-g++
-	dosym cygwin-g++ /usr/share/qt3/mkspecs/default
+	pushd ${D}/usr/share/qt3/mkspecs
+	# remove all non-cygwin specs
+	for d in *
+	do
+		case $d in
+		cygwin-g++) ;;
+		*) rmdirs+=" $d" ;;
+		esac
+	done
+	rm -fr $rmdirs
+	rm -f cygwin-g++/cygwin-g++
+	ln -s cygwin-g++ default
+	popd
 
+	mv ${D}/usr/lib/qt3/bin/qmake{,.exe}
 	for x in assistant designer linguist lrelease lupdate moc qtconfig qmake uic
 	do
 		dosym ../lib/qt3/bin/$x.exe /usr/bin/$x-qt3

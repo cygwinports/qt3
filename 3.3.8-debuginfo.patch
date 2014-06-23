@@ -1,0 +1,19 @@
+--- origsrc/qt-x11-free-3.3.8b/configure	2014-06-11 11:22:54.872255100 -0500
++++ src/qt-x11-free-3.3.8b/configure	2014-06-23 01:14:28.877223200 -0500
+@@ -229,6 +229,7 @@ CFG_MODULES_AVAILABLE=$MODULES
+ QMAKE_VARS="$QMAKE_VARS \"QT_PRODUCT=$Products\""
+ QMAKE_VARS="$QMAKE_VARS \"styles += windows motif mac platinum sgi cde motifplus\""
+ QMAKE_VARS="$QMAKE_VARS \"kbd-drivers += tty\" \"mouse-drivers += pc\""
++[ "x$OPT_CXXFLAGS" != "x" ] && QMAKE_VARS="$QMAKE_VARS \"QMAKE_CXXFLAGS += $OPT_CXXFLAGS\""
+ 
+ 
+ #-------------------------------------------------------------------------------
+@@ -2693,7 +2693,7 @@ if true; then ###[ '!' -f "$outpath/bin/
+         echo >>$mkfile
+ 	sed -e "s,@SOURCE_PATH@,$relpath,g" -e "s,@BUILD_PATH@,$outpath,g" \
+ 	    -e "s,@QMAKE_CFLAGS@,$EXTRA_CFLAGS,g" -e "s,@QMAKE_LFLAGS@,$EXTRA_LFLAGS,g" \
+-            -e "s,@QMAKE_CXXFLAGS@,$EXTRA_CXXFLAGS,g" \
++            -e "s,@QMAKE_CXXFLAGS@,$EXTRA_CXXFLAGS $OPT_CXXFLAGS,g" \
+ 	    -e "s,@QT_INSTALL_BINS@,\$(INSTALL_ROOT)$QMAKE_BIN_DIR,g" \
+ 	    -e "s,@QT_INSTALL_DATA@,\$(INSTALL_ROOT)$QMAKE_DATA_DIR,g" \
+ 	    -e "s,@QMAKE_QTOBJS@,$EXTRA_SOURCES,g" -e "s,@QMAKESPEC@,$QMAKESPEC,g" $in_mkfile >>$mkfile
