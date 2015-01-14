@@ -1,6 +1,6 @@
 NAME="qt3"
 VERSION=3.3.8b
-RELEASE=14
+RELEASE=15
 CATEGORY="Libs"
 SUMMARY="C++ GUI application framework"
 DESCRIPTION="Qt is a multiplatform C++ GUI application framework."
