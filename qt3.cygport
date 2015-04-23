@@ -1,6 +1,6 @@
 NAME="qt3"
 VERSION=3.3.8b
-RELEASE=16
+RELEASE=17
 CATEGORY="Libs"
 SUMMARY="C++ GUI application framework"
 DESCRIPTION="Qt is a multiplatform C++ GUI application framework."
@@ -54,6 +54,7 @@ PATCH_URI="
 	fedora/qt-x11-free-3.3.8b-CVE-2013-4549.patch
 	fedora/qt-x11-free-3.3.8b-CVE-2014-0190.patch
 	fedora/qt-x11-free-3.3.8b-CVE-2015-0295.patch
+	fedora/qt-x11-free-3.3.8b-CVE-2015-1860.patch
 	3.3.8-configure-misc.patch
 	3.3.8-dlopen.patch
 	3.3.8-mkspecs.patch
@@ -118,7 +119,7 @@ src_compile() {
 		|| error "configure failed"
 
 	cygmake src-moc sub-src sub-plugins sub-tools \
-		UIC="${B}/bin/uic -nostdlib -nounload -L ${B}/plugins"
+		UIC="${B}/bin/uic -nostdlib -nounload"
 }
 
 src_install() {
