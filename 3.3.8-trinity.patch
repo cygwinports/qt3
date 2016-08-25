@@ -1,0 +1,60 @@
+--- origsrc/qt-x11-free-3.3.8b/src/kernel/qobject.cpp	2008-01-15 13:09:13.000000000 -0600
++++ src/qt-x11-free-3.3.8b/src/kernel/qobject.cpp	2015-11-10 23:50:50.573148700 -0600
+@@ -360,6 +360,30 @@ static void remove_tree( QObject* obj )
+     }
+ }
+ 
++/*! \internal
++    TQt compatibility function
++*/
++QObjectList QObject::childrenListObject() {
++	if (children()) return *(children());
++	else return QObjectList();
++}
++
++/*! \internal
++    TQt compatibility function
++*/
++const QObjectList QObject::childrenListObject() const {
++	if (children()) return *(children());
++	else return QObjectList();
++}
++
++/*! \internal
++    TQt compatibility function
++*/
++const QObjectList QObject::objectTreesListObject() {
++	if (objectTrees()) return *(objectTrees());
++	else return QObjectList();
++}
++
+ 
+ /*****************************************************************************
+   QObject member functions
+--- origsrc/qt-x11-free-3.3.8b/src/kernel/qobject.h	2008-01-15 13:09:13.000000000 -0600
++++ src/qt-x11-free-3.3.8b/src/kernel/qobject.h	2015-11-10 23:52:11.285397800 -0600
+@@ -101,8 +101,11 @@ public:
+ 
+     QObject           *child( const char *objName, const char *inheritsClass = 0, bool recursiveSearch = TRUE ); //### const in 4.0
+     const QObjectList *children() const { return childObjects; }
++    QObjectList        childrenListObject();
++    const QObjectList  childrenListObject() const;
+ 
+     static const QObjectList *objectTrees();
++    static const QObjectList objectTreesListObject();
+ 
+     QObjectList	      *queryList( const char *inheritsClass = 0,
+ 				  const char *objName = 0,
+--- origsrc/qt-x11-free-3.3.8b/tools/assistant/lib/lib.pro	2015-11-11 00:12:53.118590600 -0600
++++ src/qt-x11-free-3.3.8b/tools/assistant/lib/lib.pro	2015-11-11 00:12:57.446140100 -0600
+@@ -3,8 +3,8 @@ TARGET		= qassistantclient
+ VERSION		= 1.0
+ 
+ CONFIG		+= qt warn_on release
+-CONFIG		+= staticlib
+-CONFIG		-= dll
++win32:CONFIG	+= staticlib
++win32:CONFIG	-= dll
+ 
+ SOURCES		= qassistantclient.cpp
+ HEADERS         += $$QT_SOURCE_TREE/include/qassistantclient.h
