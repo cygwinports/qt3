@@ -1,6 +1,6 @@
 NAME="qt3"
 VERSION=3.3.8b
-RELEASE=18
+RELEASE=19
 CATEGORY="Libs"
 SUMMARY="C++ GUI application framework"
 DESCRIPTION="Qt is a multiplatform C++ GUI application framework."
@@ -16,7 +16,7 @@ PATCH_URI="
 	fedora/qt-uic-nostdlib.patch
 	fedora/qt-x11-free-3.3.6-qfontdatabase_x11.patch
 	fedora/qt-3.3.3-gtkstyle.patch
-	fedora/qt-x11-free-3.3.8b-gcc5-buildkey.patch
+	fedora/qt-x11-free-3.3.8b-gcc6-buildkey.patch
 	fedora/qt-x11-free-3.3.5-uic.patch
 	fedora/qt-x11-free-3.3.8b-uic-multilib.patch
 	fedora/qt-3.3.6-fontrendering-ml_IN-209097.patch
