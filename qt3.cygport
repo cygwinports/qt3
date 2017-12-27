@@ -1,6 +1,6 @@
 NAME="qt3"
 VERSION=3.3.8b
-RELEASE=19
+RELEASE=20
 CATEGORY="Libs"
 SUMMARY="C++ GUI application framework"
 DESCRIPTION="Qt is a multiplatform C++ GUI application framework."
@@ -41,6 +41,7 @@ PATCH_URI="
 	fedora/qt-x11-immodule-unified-qt3.3.5-20051012-quiet.patch
 	fedora/qt-x11-free-3.3.8b-fix-key-release-event-with-imm.diff
 	fedora/qt-x11-free-3.3.6-qt-x11-immodule-unified-qt3.3.5-20060318-resetinputcontext.patch
+	fedora/qt-x11-free-3.3.8b-mariadb.patch
 	fedora/0038-dragobject-dont-prefer-unknown.patch
 	fedora/0047-fix-kmenu-width.diff
 	fedora/0048-qclipboard_hack_80072.patch
@@ -67,6 +68,9 @@ PATCH_URI="
 CYGPORT_USE_UNSTABLE_API=1
 src_patch_hook() {
 	sh ./make-symlinks.sh
+
+	sed -e "s|@@KDE3_PLUGIN_PATH@@|/usr/lib/kde3/plugins|" \
+	    -i src/kernel/qapplication.cpp
 
 	pushd src/moc
 
